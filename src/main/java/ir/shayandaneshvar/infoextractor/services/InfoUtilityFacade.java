@@ -23,7 +23,7 @@ public final class InfoUtilityFacade {
     private void initOperators() {
         wordCounter = sentence -> sentence.replace(".", " ").split(" ").length;
         letterCounter = s -> s.replace(" ", "").replace(".", "").length();
-        sentenceCounter = s -> s.split("\\.").length;
+        sentenceCounter = s -> s.split("\\.").length - 1;
         mostUsedLetter = sentence -> {
             sentence = sentence.replace(".", "").replace(" ", "");
             char result = ' ';
