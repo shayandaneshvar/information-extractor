@@ -1,67 +1,37 @@
 package ir.shayandaneshvar.infoextractor.services;
 
+import ir.shayandaneshvar.infoextractor.services.operators.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 @Service
-public final class InfoUtilityFacade {
-    private Operator<Integer> wordCounter;
-    private Operator<Integer> letterCounter;
-    private Operator<Integer> sentenceCounter;
-    private Operator<Character> mostUsedLetter;
-    private Operator<String> mostUsedWord;
+public final class InfoUtilityFacade implements Operator<InfoDTO> {
+    private WordCounterService wordCounter;
+    private LetterCounterService letterCounter;
+    private SentenceCounterService sentenceCounter;
+    private MostUsedLetterFinderService mostUsedLetter;
+    private MostUsedWordFinderService mostUsedWord;
     private InfoDTO infoDTO;
 
-    public InfoUtilityFacade(InfoDTO infoDTO) {
+    @Autowired
+    public InfoUtilityFacade(InfoDTO infoDTO, WordCounterService wordCounter,
+                             LetterCounterService letterCounter,
+                             SentenceCounterService sentenceCounter,
+                             MostUsedLetterFinderService mostUsedLetter,
+                             MostUsedWordFinderService mostUsedWord) {
+        this.wordCounter = wordCounter;
+        this.letterCounter = letterCounter;
+        this.sentenceCounter = sentenceCounter;
+        this.mostUsedLetter = mostUsedLetter;
+        this.mostUsedWord = mostUsedWord;
         this.infoDTO = infoDTO;
-        initOperators();
-    }
-
-    private void initOperators() {
-        wordCounter = sentence -> sentence.replace(".", " ").split(" ").length;
-        letterCounter = s -> s.replace(" ", "").replace(".", "").length();
-        sentenceCounter = s -> s.split("\\.").length - 1;
-        mostUsedLetter = sentence -> {
-            sentence = sentence.replace(".", "").replace(" ", "");
-            char result = ' ';
-            long maxRepetition = 0;
-            List<Character> chars = new ArrayList<>();
-            for (char c : sentence.toCharArray()) {
-                chars.add(c);
-            }
-            for (int i = 0; i < chars.size(); i++) {
-                char temp = chars.get(i);
-                long repetition = chars.stream().filter(x -> x == temp).count();
-                if (repetition > maxRepetition) {
-                    maxRepetition = repetition;
-                    result = temp;
-                }
-            }
-            return result;
-        };
-        mostUsedWord = sentence -> {
-            var words = sentence.replace(".", " ").split(" ");
-            String result = " ";
-            long maxRepetition = 0;
-            for (String string : words) {
-                long rep = Arrays.stream(words).filter(x -> x.equals(string)).count();
-                if (rep > maxRepetition) {
-                    maxRepetition = rep;
-                    result = string;
-                }
-            }
-            return result;
-        };
     }
 
     public Integer countWords(String string) {
         return wordCounter.apply(string);
     }
 
-    public Integer countLetters(String string) {
+    public Long countLetters(String string) {
         return letterCounter.apply(string);
     }
 
@@ -77,7 +47,8 @@ public final class InfoUtilityFacade {
         return mostUsedWord.apply(string);
     }
 
-    public InfoDTO getDTO(String string) {
+    @Override
+    public InfoDTO apply(String string) {
         infoDTO.fillData(String.valueOf(countWords(string)),
                 String.valueOf(countLetters(string)),
                 String.valueOf(getMostUsedLetter(string)),

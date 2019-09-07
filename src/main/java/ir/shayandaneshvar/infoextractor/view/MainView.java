@@ -31,7 +31,7 @@ public class MainView extends VerticalLayout {
     private void handleExtraction(String string) {
         Notification.show("Extracted!");
         Grid<InfoDTO> grid = new Grid<>(InfoDTO.class);
-        grid.setDataProvider(DataProvider.ofItems(infoUtilityFacade.getDTO(string)));
+        grid.setDataProvider(DataProvider.ofItems(infoUtilityFacade.apply(string)));
         grid.setHeightByRows(true);
         add(grid);
     }
