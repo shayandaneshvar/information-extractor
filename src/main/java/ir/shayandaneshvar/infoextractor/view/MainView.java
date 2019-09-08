@@ -10,15 +10,15 @@ import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.data.provider.DataProvider;
 import com.vaadin.flow.router.Route;
 import ir.shayandaneshvar.infoextractor.services.InfoDTO;
-import ir.shayandaneshvar.infoextractor.services.InfoUtilityFacade;
+import ir.shayandaneshvar.infoextractor.services.InfoExtractorService;
 
 @Route("")
 public class MainView extends VerticalLayout {
 
-    private InfoUtilityFacade infoUtilityFacade;
+    private InfoExtractorService infoExtractorService;
 
-    public MainView(InfoUtilityFacade utilityFacade) {
-        infoUtilityFacade = utilityFacade;
+    public MainView(InfoExtractorService utilityFacade) {
+        infoExtractorService = utilityFacade;
         Label label = new Label("Hello");
         TextArea textField = new TextArea();
         textField.setPlaceholder("Enter Text Here");
@@ -31,7 +31,7 @@ public class MainView extends VerticalLayout {
     private void handleExtraction(String string) {
         Notification.show("Extracted!");
         Grid<InfoDTO> grid = new Grid<>(InfoDTO.class);
-        grid.setDataProvider(DataProvider.ofItems(infoUtilityFacade.apply(string)));
+        grid.setDataProvider(DataProvider.ofItems(infoExtractorService.apply(string)));
         grid.setHeightByRows(true);
         add(grid);
     }

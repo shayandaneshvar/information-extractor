@@ -1,8 +1,8 @@
 package ir.shayandaneshvar.infoextractor.services.operators;
 
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
-@Service
+@Component
 public class SentenceCounterService implements Operator<Integer> {
     @Override
     public Integer apply(String string) {

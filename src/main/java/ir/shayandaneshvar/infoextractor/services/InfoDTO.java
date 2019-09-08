@@ -1,8 +1,5 @@
 package ir.shayandaneshvar.infoextractor.services;
 
-import org.springframework.stereotype.Service;
-
-@Service
 public class InfoDTO {
     private String numberOfWords;
     private String letters;
@@ -10,14 +7,12 @@ public class InfoDTO {
     private String mostUsedWord;
     private String numberOfSentences;
 
-    public void fillData(String numberOfWords, String letters,
-                         String mostUsedLetter, String mostUsedWord,
-                         String numberOfSentences) {
-        this.numberOfWords = numberOfWords;
-        this.letters = letters;
-        this.mostUsedLetter = mostUsedLetter;
-        this.mostUsedWord = mostUsedWord;
-        this.numberOfSentences = numberOfSentences;
+    public InfoDTO(TextInfo textInfo) {
+        numberOfSentences = textInfo.getNumberOfSentences();
+        letters = textInfo.getLetters();
+        mostUsedLetter = textInfo.getMostUsedLetter();
+        mostUsedWord = textInfo.getMostUsedWord();
+        numberOfWords = textInfo.getNumberOfWords();
     }
 
     public String getNumberOfWords() {
