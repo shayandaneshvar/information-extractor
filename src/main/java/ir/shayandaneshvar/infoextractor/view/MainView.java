@@ -12,27 +12,34 @@ import com.vaadin.flow.router.Route;
 import ir.shayandaneshvar.infoextractor.services.InfoDTO;
 import ir.shayandaneshvar.infoextractor.services.InfoExtractorService;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Route("")
 public class MainView extends VerticalLayout {
 
     private InfoExtractorService infoExtractorService;
+    List<InfoDTO> data;
 
     public MainView(InfoExtractorService utilityFacade) {
+        data = new ArrayList<>();
         infoExtractorService = utilityFacade;
         Label label = new Label("Hello");
         TextArea textField = new TextArea();
         textField.setPlaceholder("Enter Text Here");
+        Grid<InfoDTO> grid = new Grid<>(InfoDTO.class);
+        grid.setHeightByRows(true);
         Button button = new Button("Extract",
-                buttonClickEvent -> handleExtraction(textField.getValue()));
+                buttonClickEvent -> handleExtraction(textField.getValue(), grid));
         add(new H1("Info Extractor"));
         add(label, textField, button);
+        add(grid);
+        setAlignItems(Alignment.CENTER);
     }
 
-    private void handleExtraction(String string) {
+    private void handleExtraction(String string, Grid<InfoDTO> grid) {
         Notification.show("Extracted!");
-        Grid<InfoDTO> grid = new Grid<>(InfoDTO.class);
-        grid.setDataProvider(DataProvider.ofItems(infoExtractorService.apply(string)));
-        grid.setHeightByRows(true);
-        add(grid);
+        data.add(infoExtractorService.apply(string));
+        grid.setDataProvider(DataProvider.ofCollection(data));
     }
 }
