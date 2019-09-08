@@ -1,18 +1,28 @@
 package ir.shayandaneshvar.infoextractor.services;
 
 public class InfoDTO {
-    private String numberOfWords;
+    private String tag;
     private String letters;
+    private String numberOfWords;
     private String mostUsedLetter;
     private String mostUsedWord;
     private String numberOfSentences;
 
+    public String getTag() {
+        return tag;
+    }
+
+    public void setTag(String tag) {
+        this.tag = tag;
+    }
+
     public InfoDTO(TextInfo textInfo) {
-        numberOfSentences = textInfo.getNumberOfSentences();
+        tag = textInfo.getTag();
         letters = textInfo.getLetters();
+        numberOfWords = textInfo.getNumberOfWords();
+        numberOfSentences = textInfo.getNumberOfSentences();
         mostUsedLetter = textInfo.getMostUsedLetter();
         mostUsedWord = textInfo.getMostUsedWord();
-        numberOfWords = textInfo.getNumberOfWords();
     }
 
     public String getNumberOfWords() {

@@ -4,8 +4,11 @@ import ir.shayandaneshvar.infoextractor.services.operators.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.function.BiFunction;
+
 @Service
-public final class CompositeInfoFacade implements Operator<TextInfo> {
+public final class CompositeInfoFacade implements BiFunction<String, String,
+        TextInfo> {
     private WordCounterService wordCounter;
     private LetterCounterService letterCounter;
     private SentenceCounterService sentenceCounter;
@@ -46,11 +49,11 @@ public final class CompositeInfoFacade implements Operator<TextInfo> {
     }
 
     @Override
-    public TextInfo apply(String string) {
-        TextInfo textInfo = new TextInfo(string, String.valueOf(countWords(
-                string)), String.valueOf(countLetters(string)),
-                String.valueOf(getMostUsedLetter(string)), getMostUsedWord(
-                string), String.valueOf(countSentences(string)));
+    public TextInfo apply(String tag, String text) {
+        TextInfo textInfo = new TextInfo(tag,text, String.valueOf(countWords(
+                text)), String.valueOf(countLetters(text)),
+                String.valueOf(getMostUsedLetter(text)), getMostUsedWord(
+                text), String.valueOf(countSentences(text)));
         return textInfo;
     }
 }
